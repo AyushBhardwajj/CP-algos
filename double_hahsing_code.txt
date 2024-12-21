@@ -1,0 +1,83 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef unsigned long long ll;
+typedef long long ll;
+typedef long double ld;
+
+const ll mod = 1e9+7;
+const ld eps = 1e-9;
+const ll maxn = 1e5+1;
+const ll inf = 5e18;
+const ll mint =  -inf;
+
+#define mp make_pair;
+#define pb push_back;
+#define endl "\n"
+
+ll bin_power(ll base,ll power){
+    ll res =1;
+    
+    while(power>0){
+        if(power&1){
+            res = res*base;
+        }
+        base = base*base;
+        power>>=1;
+    }
+    
+    return res;
+}
+
+ll bin_power_mod(ll base, ll power, ll m){
+    base %= m;
+    ll res =  1;
+    while(power>0){
+        if(power & 1){
+            res = res*base % m;
+        }
+        
+        base = base*base % m;
+        power >>=1;
+    }
+    
+    return res;
+}
+
+ll modulo_inverse(ll base,ll mod){
+    return bin_power_mod(base,mod-2,mod);
+}
+
+bool solve(){
+    string s;
+    cin>>s;
+    
+    ll n = s.size();
+    
+    ll p1 = 31 ,mod1 = 1e9+7;
+    ll p2 = 37 , mod2 = 1e9+9;
+    
+    vector<ll> hash1(n,0) ,hash2(n,0);
+    hash1[0] = hash2[0] = s[0]-'a'+1;
+    
+    for(int i=1;i<n;i++){
+        hash1[i] = (hash1[i-1] + (s[i]-'a'+1)*bin_power_mod(p1,i,mod1))%mod1;
+        hash2[i] =  (hash2[i-1] + (s[i] - 'a'+1)*bin_power_mod(p2,i,mod2)%mod2;
+    }
+    
+    for(int i=1;i<n;i++){
+        
+        ll hash1prefix = hash1[i-1];
+        ll hash2prefix = hash2[i-1];
+        
+        ll hash1suffix = ((hash1[n-1] - hash[n-1-i])*modulo_inverse(bin_power_mod(p1,n-i,mod1),mod1));
+        ll hash2suffix  = ((hash2[n-1] - hash[n-1-i])*modulo_inverse(bin_power_mod(p2,n-i,mod2),mod2));
+        
+        if(hash1prefix == hash1suffix && hash2prefix == hash2suffix){
+            cout<<i<<endl;
+        }
+    }
+    
+    return true;
+    
+}
